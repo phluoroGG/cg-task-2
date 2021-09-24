@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -21,9 +22,9 @@ public class Main {
             final String token = wordsInLine.get(0);
 
             if (token.equals("v")) {
-                wordsInLine.set(1, Double.toString(Double.parseDouble(wordsInLine.get(1)) + x));
-                wordsInLine.set(2, Double.toString(Double.parseDouble(wordsInLine.get(2)) + y));
-                wordsInLine.set(3, Double.toString(Double.parseDouble(wordsInLine.get(3)) + z));
+                wordsInLine.set(1, String.format("%.4f", Double.parseDouble(wordsInLine.get(1)) + x));
+                wordsInLine.set(2, String.format("%.4f", Double.parseDouble(wordsInLine.get(2)) + y));
+                wordsInLine.set(3, String.format("%.4f", Double.parseDouble(wordsInLine.get(3)) + z));
                 newString.append(wordsInLine.get(0)).append(" ")
                         .append(wordsInLine.get(1)).append(" ")
                         .append(wordsInLine.get(2)).append(" ")
@@ -36,6 +37,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+        Locale.setDefault(Locale.ROOT);
         Path fileName = Path.of("WrapHand.obj");
         String fileContent = Files.readString(fileName);
         double x = 1;
