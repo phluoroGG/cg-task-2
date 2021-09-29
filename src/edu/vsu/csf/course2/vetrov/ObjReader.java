@@ -44,8 +44,11 @@ public class ObjReader {
     }
 
     protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() > 3) {
+            throw new ObjReaderException("Too many vertex arguments.", lineInd);
+        }
         try {
-            return new Vector3f(
+            return new Vector3f (
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
@@ -59,7 +62,17 @@ public class ObjReader {
     }
 
     protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() > 2) {
+            throw new ObjReaderException("Too many texture vertex arguments.", lineInd);
+        }
         try {
+            if (
+                    Float.parseFloat(wordsInLineWithoutToken.get(0)) > 1 ||
+                    Float.parseFloat(wordsInLineWithoutToken.get(0)) < 0 ||
+                    Float.parseFloat(wordsInLineWithoutToken.get(1)) > 1 ||
+                    Float.parseFloat(wordsInLineWithoutToken.get(1)) < 0) {
+                throw new ObjReaderException("Invalid value for texture vertex.", lineInd);
+            }
             return new Vector2f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)));
@@ -73,8 +86,11 @@ public class ObjReader {
     }
 
     protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() > 3) {
+            throw new ObjReaderException("Too many normal arguments.", lineInd);
+        }
         try {
-            return new Vector3f(
+            return new Vector3f (
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
@@ -114,6 +130,9 @@ public class ObjReader {
             int lineInd) {
         try {
             String[] wordIndices = wordInLine.split("/");
+            if (wordIndices[0].equals("")) {
+                throw new ObjReaderException("Invalid element size.", lineInd);
+            }
             switch (wordIndices.length) {
                 case 1 -> {
                     onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
